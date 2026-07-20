@@ -191,6 +191,21 @@
       border-color: rgba(145, 183, 255, 0.45);
     }
     .msg.bot { align-self: flex-start; }
+    .msg.progress {
+      border-color: rgba(240, 189, 105, 0.45);
+      background: rgba(240, 189, 105, 0.08);
+    }
+    .step-list {
+      display: grid;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .step { display: flex; gap: 8px; align-items: flex-start; }
+    .step .mark { width: 18px; flex: 0 0 18px; color: var(--amber); }
+    .step.done .mark { color: var(--green); }
+    .step.fail .mark { color: var(--red); }
     .msg .mini-actions {
       display: flex;
       gap: 8px;
@@ -324,6 +339,39 @@
       $('chat-log').scrollTop = $('chat-log').scrollHeight;
     }
 
+    function addProgressMessage(title) {
+      const node = document.createElement('div');
+      node.className = 'msg bot progress';
+      const titleNode = document.createElement('div');
+      titleNode.textContent = title;
+      const list = document.createElement('div');
+      list.className = 'step-list';
+      node.appendChild(titleNode);
+      node.appendChild(list);
+      $('chat-log').appendChild(node);
+      $('chat-log').scrollTop = $('chat-log').scrollHeight;
+
+      function step(text, state = 'active') {
+        const item = document.createElement('div');
+        item.className = `step ${state === 'done' ? 'done' : state === 'fail' ? 'fail' : ''}`;
+        item.innerHTML = `<span class="mark">${state === 'done' ? '✓' : state === 'fail' ? '!' : '…'}</span><span>${esc(text)}</span>`;
+        list.appendChild(item);
+        $('chat-log').scrollTop = $('chat-log').scrollHeight;
+        return {
+          done(nextText) {
+            item.className = 'step done';
+            item.innerHTML = `<span class="mark">✓</span><span>${esc(nextText || text)}</span>`;
+          },
+          fail(nextText) {
+            item.className = 'step fail';
+            item.innerHTML = `<span class="mark">!</span><span>${esc(nextText || text)}</span>`;
+          }
+        };
+      }
+
+      return { step };
+    }
+
     function getActionItems() {
       return state.report?.action_items || [];
     }
@@ -403,42 +451,56 @@
       return `<button type="button" onclick="runCommand('${esc(command)}')">${esc(label)}</button>`;
     }
 
-    async function loadState(sayHello = false) {
+    async function loadState(sayHello = false, progress = null) {
       setApiStatus(false, 'Refreshing...');
+      const fetchStep = progress?.step('Fetching scheduler status, latest report, and report history...');
       const [status, latest, history] = await Promise.allSettled([
         api('/admin/api/automation/status'),
         api('/admin/api/automation/reports/daily/latest'),
         api('/admin/api/automation/reports/daily/history'),
       ]);
+      fetchStep?.done('Fetched scheduler status, latest report, and report history.');
 
       if (status.status === 'fulfilled') state.status = status.value;
       if (latest.status === 'fulfilled') state.report = latest.value;
       if (history.status === 'fulfilled') state.history = history.value;
 
       if (!state.report) {
+        const genStep = progress?.step('No saved daily report found; generating one now...');
         const generated = await api('/admin/api/automation/reports/daily', { method: 'POST' });
         state.report = generated.report;
+        genStep?.done('Generated an initial daily automation report.');
       }
 
       setApiStatus(true, `AI Engine connected at ${API_BASE}`);
       renderDashboard();
+      progress?.step('Dashboard cards and suggestions refreshed.', 'done');
 
       if (sayHello) {
         addMessage('bot', summarizeNext(), buildActions());
       }
     }
 
-    async function triggerJob(jobId) {
+    async function triggerJob(jobId, progress = null) {
+      const queueStep = progress?.step(`Queueing scheduler job: ${jobId}...`);
       await api(`/scheduler/trigger/${jobId}`, { method: 'POST' });
-      await loadState(false);
+      queueStep?.done(`Scheduler accepted job: ${jobId}.`);
+      const noteStep = progress?.step('Refreshing dashboard state after queueing the job...');
+      await loadState(false, progress);
+      noteStep?.done('Dashboard state refreshed. Long-running jobs may continue in the AI Engine logs.');
       return `Triggered scheduler job: ${jobId}. It is queued to run immediately by APScheduler.`;
     }
 
-    async function generateReport(cadence) {
+    async function generateReport(cadence, progress = null) {
+      const genStep = progress?.step(`Requesting ${cadence} report generation...`);
       const payload = await api(`/admin/api/automation/reports/${cadence}`, { method: 'POST' });
+      genStep?.done(`${cadence[0].toUpperCase() + cadence.slice(1)} report saved.`);
       state.report = cadence === 'daily' ? payload.report : state.report;
+      const histStep = progress?.step('Refreshing report history...');
       state.history = await api('/admin/api/automation/reports/daily/history');
+      histStep?.done('Report history refreshed.');
       renderDashboard();
+      progress?.step('Dashboard cards and links updated.', 'done');
       return `${cadence[0].toUpperCase() + cadence.slice(1)} report generated.\n${API_BASE}${payload.paths.latest_html_url}`;
     }
 
@@ -447,34 +509,37 @@
       if (!text) return;
       addMessage('user', text);
       const lower = text.toLowerCase();
+      const progress = addProgressMessage(`Working on: ${text}`);
 
       try {
         let reply = '';
         let actions = [];
 
         if (lower.includes('generate') && lower.includes('hour')) {
-          reply = await generateReport('hourly');
+          reply = await generateReport('hourly', progress);
         } else if (lower.includes('generate') && lower.includes('week')) {
-          reply = await generateReport('weekly');
+          reply = await generateReport('weekly', progress);
         } else if (lower.includes('generate') && lower.includes('report')) {
-          reply = await generateReport('daily');
+          reply = await generateReport('daily', progress);
         } else if (lower.includes('press enrichment') || lower.includes('enrich press')) {
-          reply = await triggerJob('press_enrichment');
+          reply = await triggerJob('press_enrichment', progress);
         } else if (lower.includes('press discovery') || lower.includes('discover press')) {
-          reply = await triggerJob('press_discovery');
+          reply = await triggerJob('press_discovery', progress);
         } else if (lower.includes('contact enrichment') || lower.includes('enrich contact')) {
-          reply = await triggerJob('contact_enrichment');
+          reply = await triggerJob('contact_enrichment', progress);
         } else if (lower.includes('follow')) {
-          reply = await triggerJob('followup_check');
+          reply = await triggerJob('followup_check', progress);
         } else if (lower.includes('short') && lower.includes('generation')) {
-          reply = await triggerJob('daily_shorts_generation');
+          reply = await triggerJob('daily_shorts_generation', progress);
         } else if (lower.includes('short') && lower.includes('posting')) {
-          reply = await triggerJob('daily_shorts_posting');
+          reply = await triggerJob('daily_shorts_posting', progress);
         } else if (lower.includes('cron')) {
+          progress.step('Reading cached cron inventory from the latest status payload...', 'done');
           const summary = state.status?.cron?.summary || {};
           reply = `Cron inventory: ${summary.total ?? 0} jobs, ${summary.nullrecords ?? 0} NullRecords-related, ${summary.stale_ob_cms ?? 0} stale ob-cms jobs, ${summary.duplicates ?? 0} exact duplicates. I would not remove anything from chat yet; use this to plan cleanup.`;
           actions = [{ label: 'Refresh inventory', kind: 'primary', run: () => runCommand('refresh status') }];
         } else if (lower.includes('campaign')) {
+          progress.step('Reading draft campaigns from the latest automation report...', 'done');
           const drafts = state.report?.press?.draft_campaigns || [];
           reply = drafts.length
             ? `Draft campaigns:\n${drafts.map(c => `- ${c.name} (${c.vertical})`).join('\n')}`
@@ -482,18 +547,22 @@
           actions = [{ label: 'Open AI Engine admin', kind: 'primary', run: () => window.open(`${API_BASE}/admin`, '_blank') }];
         } else if (lower.includes('open admin')) {
           window.open(`${API_BASE}/admin`, '_blank');
+          progress.step('Opened the AI Engine admin in a new tab.', 'done');
           reply = 'Opened the AI Engine admin in a new tab.';
         } else if (lower.includes('refresh') || lower.includes('status')) {
-          await loadState(false);
+          await loadState(false, progress);
           reply = 'Status refreshed.\n\n' + summarizeNext();
           actions = buildActions();
         } else {
+          progress.step('Using the latest automation report to summarize next actions.', 'done');
           reply = summarizeNext();
           actions = buildActions();
         }
 
+        progress.step('Done.', 'done');
         addMessage('bot', reply, actions);
       } catch (err) {
+        progress.step(`Failed: ${err.message}`, 'fail');
         addMessage('bot', `That command failed: ${err.message}\n\nThe AI Engine may be offline, or the scheduler may not be running.`);
       }
     }
