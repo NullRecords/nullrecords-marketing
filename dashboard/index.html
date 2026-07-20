@@ -1,11 +1,517 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0;url=daily_report_latest.html">
-  <title>Null Records Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NullRecords Marketing Dashboard</title>
+  <style>
+    :root {
+      --bg: #0e1118;
+      --panel: #171b25;
+      --panel-2: #11151e;
+      --line: #2a3040;
+      --text: #ece7d8;
+      --muted: #9aa2b4;
+      --amber: #f0bd69;
+      --green: #9ed6c2;
+      --red: #ff7777;
+      --blue: #91b7ff;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(145, 183, 255, 0.08), transparent 32rem),
+        linear-gradient(315deg, rgba(240, 189, 105, 0.08), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+      font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px clamp(16px, 4vw, 40px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(14, 17, 24, 0.78);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--amber);
+      font-size: clamp(24px, 4vw, 38px);
+      letter-spacing: 0;
+      line-height: 1.05;
+    }
+    h2 { font-size: 14px; color: var(--amber); margin-bottom: 10px; }
+    h3 { font-size: 13px; color: var(--text); margin-bottom: 4px; }
+
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .subhead { color: var(--muted); margin-top: 4px; }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 8px 10px;
+      border-radius: 8px;
+      white-space: nowrap;
+      color: var(--muted);
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 14px currentColor;
+    }
+    .dot.on { background: var(--green); }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(340px, 1.35fr);
+      gap: 18px;
+      padding: 18px clamp(16px, 4vw, 40px) 40px;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: rgba(23, 27, 37, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .panel-pad { padding: 16px; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .metric {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 92px;
+    }
+    .metric .num {
+      display: block;
+      color: var(--green);
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-top: 8px;
+    }
+    .metric .label { color: var(--muted); font-size: 12px; }
+
+    .recommendations {
+      display: grid;
+      gap: 10px;
+    }
+    .rec {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .rec p { color: var(--muted); }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    button, input {
+      font: inherit;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #0b0e14;
+      color: var(--text);
+    }
+    button {
+      padding: 8px 10px;
+      cursor: pointer;
+      min-height: 38px;
+    }
+    button.primary { border-color: rgba(158, 214, 194, 0.7); color: var(--green); }
+    button.warn { border-color: rgba(240, 189, 105, 0.7); color: var(--amber); }
+    button:hover { background: #151a25; }
+    button:disabled { cursor: wait; opacity: 0.55; }
+
+    .chat {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: calc(100vh - 128px);
+      overflow: hidden;
+    }
+    .chat-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+    .chat-log {
+      overflow: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 420px;
+    }
+    .msg {
+      max-width: 82%;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 8px;
+      padding: 11px 12px;
+      white-space: pre-wrap;
+    }
+    .msg.user {
+      align-self: flex-end;
+      background: #1c2432;
+      border-color: rgba(145, 183, 255, 0.45);
+    }
+    .msg.bot { align-self: flex-start; }
+    .msg .mini-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .composer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 12px;
+      border-top: 1px solid var(--line);
+      background: rgba(17, 21, 30, 0.96);
+    }
+    input {
+      width: 100%;
+      padding: 0 12px;
+      min-height: 42px;
+      outline: none;
+    }
+    input:focus { border-color: var(--green); }
+
+    .links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .small { color: var(--muted); font-size: 12px; }
+    .mono { font-family: "SFMono-Regular", Consolas, monospace; }
+
+    @media (max-width: 960px) {
+      main { grid-template-columns: 1fr; }
+      .chat { min-height: 620px; }
+    }
+    @media (max-width: 620px) {
+      header { align-items: flex-start; flex-direction: column; }
+      .metrics { grid-template-columns: 1fr; }
+      .msg { max-width: 100%; }
+      .composer { grid-template-columns: 1fr; }
+      .status-pill { white-space: normal; }
+    }
+  </style>
 </head>
 <body>
-  <p>Redirecting to <a href="daily_report_latest.html">latest daily report</a>…</p>
+  <header>
+    <div>
+      <h1>Marketing Command</h1>
+      <p class="subhead">NullRecords, Drift TV, and Washoku Plus automation overview</p>
+    </div>
+    <div class="status-pill"><span id="api-dot" class="dot"></span><span id="api-status">Connecting to AI Engine...</span></div>
+  </header>
+
+  <main>
+    <section>
+      <div class="metrics" id="metrics"></div>
+
+      <div class="panel panel-pad">
+        <h2>Suggested Next Moves</h2>
+        <div id="recommendations" class="recommendations">
+          <div class="rec"><p>Loading current report and schedule state...</p></div>
+        </div>
+        <div class="links">
+          <a href="daily_report_latest.html" target="_blank">Legacy daily report</a>
+          <a id="latest-report-link" href="#" target="_blank">Latest automation report</a>
+          <a href="daily_reports/" target="_blank">Report archive</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel chat">
+      <div class="chat-head">
+        <div>
+          <h2>Marketing Chat</h2>
+          <p class="small">Ask what to do next, generate reports, or trigger safe scheduler jobs.</p>
+        </div>
+        <button id="refresh-btn" class="primary" type="button">Refresh</button>
+      </div>
+      <div id="chat-log" class="chat-log"></div>
+      <form id="chat-form" class="composer">
+        <input id="chat-input" autocomplete="off" placeholder="Try: what should we do next, generate daily report, run press enrichment">
+        <button class="primary" type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const API_BASE = localStorage.getItem('nullrecords_ai_engine') || 'http://127.0.0.1:8009';
+    const state = { status: null, report: null, history: null };
+
+    const $ = (id) => document.getElementById(id);
+    const esc = (text) => String(text ?? '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+
+    async function api(path, options = {}) {
+      const res = await fetch(API_BASE + path, options);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      return res.json();
+    }
+
+    function setApiStatus(ok, text) {
+      $('api-dot').classList.toggle('on', ok);
+      $('api-status').textContent = text;
+    }
+
+    function metric(label, num, sub = '') {
+      return `<div class="metric"><span class="label">${esc(label)}</span><span class="num">${esc(num)}</span><p class="small">${esc(sub)}</p></div>`;
+    }
+
+    function addMessage(role, text, actions = []) {
+      const node = document.createElement('div');
+      node.className = `msg ${role}`;
+      node.innerHTML = `<div>${esc(text)}</div>`;
+      if (actions.length) {
+        const wrap = document.createElement('div');
+        wrap.className = 'mini-actions';
+        for (const action of actions) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = action.kind || '';
+          btn.textContent = action.label;
+          btn.addEventListener('click', action.run);
+          wrap.appendChild(btn);
+        }
+        node.appendChild(wrap);
+      }
+      $('chat-log').appendChild(node);
+      $('chat-log').scrollTop = $('chat-log').scrollHeight;
+    }
+
+    function getActionItems() {
+      return state.report?.action_items || [];
+    }
+
+    function summarizeNext() {
+      const items = getActionItems();
+      if (!items.length) return 'No urgent action items are showing right now. I would refresh status, generate a daily report, and then review press campaigns.';
+      return `Here is what I would do next:\n\n${items.map((item, i) => `${i + 1}. ${item}`).join('\n')}`;
+    }
+
+    function buildActions() {
+      return [
+        { label: 'Generate hourly report', kind: 'primary', run: () => runCommand('generate hourly report') },
+        { label: 'Generate daily report', kind: 'primary', run: () => runCommand('generate daily report') },
+        { label: 'Run press enrichment', kind: 'warn', run: () => runCommand('run press enrichment') },
+        { label: 'Run press discovery', kind: 'warn', run: () => runCommand('run press discovery') },
+        { label: 'Run contact enrichment', kind: 'warn', run: () => runCommand('run contact enrichment') },
+      ];
+    }
+
+    function renderDashboard() {
+      const report = state.report || {};
+      const cron = report.cron?.summary || state.status?.cron?.summary || {};
+      const press = report.press || {};
+      const outreach = report.outreach || {};
+      const shorts = report.daily_shorts || {};
+      const schedulerJobs = state.status?.scheduler?.jobs || [];
+
+      $('metrics').innerHTML = [
+        metric('Scheduler jobs', schedulerJobs.length || '0', state.status?.scheduler?.running ? 'running' : 'not running'),
+        metric('Stale cron jobs', cron.stale_ob_cms ?? '0', `${cron.total ?? 0} total cron jobs`),
+        metric('Press contacts', press.contacts_total ?? '0', `${press.needs_email ?? 0} need email`),
+        metric('Draft campaigns', press.campaigns_by_status?.draft ?? '0', 'review before distribution'),
+        metric('Daily shorts', shorts.queue_total ?? '0', `${shorts.queue_by_status?.pending ?? 0} pending`),
+        metric('Follow-ups due', outreach.followups_due ?? '0', `${outreach.logs_total ?? 0} outreach logs`),
+      ].join('');
+
+      const items = getActionItems();
+      const recs = items.length ? items : [
+        'Generate the daily automation report.',
+        'Review current scheduler status and cron inventory.',
+        'Check Drift TV and Washoku Plus press campaign drafts.',
+      ];
+      $('recommendations').innerHTML = recs.map((item, idx) => `
+        <div class="rec">
+          <h3>${idx + 1}. ${esc(item)}</h3>
+          <p>${recommendationDetail(item)}</p>
+          <div class="actions">${buttonsForRecommendation(item)}</div>
+        </div>
+      `).join('');
+
+      const latest = state.history?.latest_html_url || '/exports/marketing_reports/daily/daily_marketing_report_latest.html';
+      $('latest-report-link').href = API_BASE + latest;
+    }
+
+    function recommendationDetail(item) {
+      const lower = item.toLowerCase();
+      if (lower.includes('press contacts')) return 'This is a good automation task: it improves the queue without sending anything public.';
+      if (lower.includes('draft press')) return 'Keep this review-gated. Generate and inspect reports before distribution.';
+      if (lower.includes('daily shorts')) return 'This should stay approval-based: generate, preview, then approve or reject.';
+      if (lower.includes('cron')) return 'Inventory first, then remove or migrate old jobs deliberately.';
+      return 'This came from the latest automation report.';
+    }
+
+    function buttonsForRecommendation(item) {
+      const lower = item.toLowerCase();
+      const buttons = [];
+      if (lower.includes('press contacts')) buttons.push(buttonHtml('Run press enrichment', 'run press enrichment'));
+      if (lower.includes('draft press')) buttons.push(buttonHtml('Open press campaigns', 'show campaigns'));
+      if (lower.includes('daily shorts')) buttons.push(buttonHtml('Open AI Engine admin', 'open admin'));
+      if (lower.includes('cron')) buttons.push(buttonHtml('Show cron inventory', 'show cron'));
+      buttons.push(buttonHtml('Generate daily report', 'generate daily report'));
+      return buttons.join('');
+    }
+
+    function buttonHtml(label, command) {
+      return `<button type="button" onclick="runCommand('${esc(command)}')">${esc(label)}</button>`;
+    }
+
+    async function loadState(sayHello = false) {
+      setApiStatus(false, 'Refreshing...');
+      const [status, latest, history] = await Promise.allSettled([
+        api('/admin/api/automation/status'),
+        api('/admin/api/automation/reports/daily/latest'),
+        api('/admin/api/automation/reports/daily/history'),
+      ]);
+
+      if (status.status === 'fulfilled') state.status = status.value;
+      if (latest.status === 'fulfilled') state.report = latest.value;
+      if (history.status === 'fulfilled') state.history = history.value;
+
+      if (!state.report) {
+        const generated = await api('/admin/api/automation/reports/daily', { method: 'POST' });
+        state.report = generated.report;
+      }
+
+      setApiStatus(true, `AI Engine connected at ${API_BASE}`);
+      renderDashboard();
+
+      if (sayHello) {
+        addMessage('bot', summarizeNext(), buildActions());
+      }
+    }
+
+    async function triggerJob(jobId) {
+      await api(`/scheduler/trigger/${jobId}`, { method: 'POST' });
+      await loadState(false);
+      return `Triggered scheduler job: ${jobId}. It is queued to run immediately by APScheduler.`;
+    }
+
+    async function generateReport(cadence) {
+      const payload = await api(`/admin/api/automation/reports/${cadence}`, { method: 'POST' });
+      state.report = cadence === 'daily' ? payload.report : state.report;
+      state.history = await api('/admin/api/automation/reports/daily/history');
+      renderDashboard();
+      return `${cadence[0].toUpperCase() + cadence.slice(1)} report generated.\n${API_BASE}${payload.paths.latest_html_url}`;
+    }
+
+    async function runCommand(raw) {
+      const text = raw.trim();
+      if (!text) return;
+      addMessage('user', text);
+      const lower = text.toLowerCase();
+
+      try {
+        let reply = '';
+        let actions = [];
+
+        if (lower.includes('generate') && lower.includes('hour')) {
+          reply = await generateReport('hourly');
+        } else if (lower.includes('generate') && lower.includes('week')) {
+          reply = await generateReport('weekly');
+        } else if (lower.includes('generate') && lower.includes('report')) {
+          reply = await generateReport('daily');
+        } else if (lower.includes('press enrichment') || lower.includes('enrich press')) {
+          reply = await triggerJob('press_enrichment');
+        } else if (lower.includes('press discovery') || lower.includes('discover press')) {
+          reply = await triggerJob('press_discovery');
+        } else if (lower.includes('contact enrichment') || lower.includes('enrich contact')) {
+          reply = await triggerJob('contact_enrichment');
+        } else if (lower.includes('follow')) {
+          reply = await triggerJob('followup_check');
+        } else if (lower.includes('short') && lower.includes('generation')) {
+          reply = await triggerJob('daily_shorts_generation');
+        } else if (lower.includes('short') && lower.includes('posting')) {
+          reply = await triggerJob('daily_shorts_posting');
+        } else if (lower.includes('cron')) {
+          const summary = state.status?.cron?.summary || {};
+          reply = `Cron inventory: ${summary.total ?? 0} jobs, ${summary.nullrecords ?? 0} NullRecords-related, ${summary.stale_ob_cms ?? 0} stale ob-cms jobs, ${summary.duplicates ?? 0} exact duplicates. I would not remove anything from chat yet; use this to plan cleanup.`;
+          actions = [{ label: 'Refresh inventory', kind: 'primary', run: () => runCommand('refresh status') }];
+        } else if (lower.includes('campaign')) {
+          const drafts = state.report?.press?.draft_campaigns || [];
+          reply = drafts.length
+            ? `Draft campaigns:\n${drafts.map(c => `- ${c.name} (${c.vertical})`).join('\n')}`
+            : 'No draft campaigns are showing in the latest report.';
+          actions = [{ label: 'Open AI Engine admin', kind: 'primary', run: () => window.open(`${API_BASE}/admin`, '_blank') }];
+        } else if (lower.includes('open admin')) {
+          window.open(`${API_BASE}/admin`, '_blank');
+          reply = 'Opened the AI Engine admin in a new tab.';
+        } else if (lower.includes('refresh') || lower.includes('status')) {
+          await loadState(false);
+          reply = 'Status refreshed.\n\n' + summarizeNext();
+          actions = buildActions();
+        } else {
+          reply = summarizeNext();
+          actions = buildActions();
+        }
+
+        addMessage('bot', reply, actions);
+      } catch (err) {
+        addMessage('bot', `That command failed: ${err.message}\n\nThe AI Engine may be offline, or the scheduler may not be running.`);
+      }
+    }
+
+    $('chat-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const input = $('chat-input');
+      const text = input.value;
+      input.value = '';
+      runCommand(text);
+    });
+    $('refresh-btn').addEventListener('click', () => runCommand('refresh status'));
+
+    loadState(true).catch((err) => {
+      setApiStatus(false, `AI Engine unavailable at ${API_BASE}`);
+      addMessage('bot', `I could not reach the AI Engine at ${API_BASE}: ${err.message}\n\nStart the services, then hit Refresh.`);
+      renderDashboard();
+    });
+  </script>
 </body>
 </html>
