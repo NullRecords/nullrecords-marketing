@@ -18,6 +18,7 @@ from app.models.playlist import Playlist
 from app.models.influencer import Influencer
 from app.models.outreach import OutreachLog
 from app.models.credentials import APICredential
+from app.services.ai_provider import ai_status
 
 router = APIRouter(prefix="/admin/api", tags=["admin"])
 
@@ -121,8 +122,10 @@ def overview(db: Session = Depends(get_db)):
     configured_services = [c.service for c in creds]
 
     # Config status
+    ai = ai_status()
     api_status = {
-        "openai": bool(settings.openai_api_key),
+        "local_ai": ai["local_ai"],
+        "openai": ai["openai"],
         "pexels": bool(settings.pexels_api_key),
         "spotify": bool(settings.spotify_client_id and settings.spotify_client_secret),
         "youtube": bool(settings.youtube_api_key),
@@ -142,6 +145,7 @@ def overview(db: Session = Depends(get_db)):
             "total_logs": outreach_total,
         },
         "api_status": api_status,
+        "ai_status": ai,
         "configured_services": configured_services,
         "label": {"name": settings.label_name, "genre": settings.label_genre},
     }

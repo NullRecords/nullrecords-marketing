@@ -1,11 +1,9 @@
-"""AI-powered media tagging via OpenAI."""
+"""AI-powered media tagging via the configured AI provider."""
 
 import json
 from typing import Any
 
-from openai import OpenAI
-
-from app.core.config import get_settings
+from app.services.ai_provider import generate_text
 
 
 def tag_media(title: str, description: str = "") -> dict[str, Any]:
@@ -13,12 +11,6 @@ def tag_media(title: str, description: str = "") -> dict[str, Any]:
 
     Returns {"tags": [...], "mood": "...", "style": "..."}.
     """
-    settings = get_settings()
-    if not settings.openai_api_key:
-        return {"tags": [], "mood": "unknown", "style": "unknown"}
-
-    client = OpenAI(api_key=settings.openai_api_key)
-
     prompt = (
         "You are a media tagging assistant for a music label that specialises in "
         "nu jazz, lo-fi, and experimental electronic music.\n\n"
@@ -35,14 +27,13 @@ def tag_media(title: str, description: str = "") -> dict[str, Any]:
         "Return ONLY the JSON object, no markdown fences."
     )
 
-    response = client.chat.completions.create(
-        model=settings.openai_model,
-        messages=[{"role": "user", "content": prompt}],
+    text = generate_text(
+        prompt,
         temperature=0.4,
         max_tokens=300,
     )
-
-    text = response.choices[0].message.content.strip()
+    if not text:
+        return {"tags": [], "mood": "unknown", "style": "unknown"}
 
     # Strip markdown code fences if the model includes them anyway
     if text.startswith("```"):

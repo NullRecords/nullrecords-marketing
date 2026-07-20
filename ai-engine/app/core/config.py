@@ -17,6 +17,17 @@ class Settings(BaseSettings):
     # --- Database ---
     database_url: str = f"sqlite:///{BASE_DIR / 'ai_engine.db'}"
 
+    # --- AI provider routing ---
+    # local_first: try Ollama endpoints first, then OpenAI fallback if enabled
+    # local: only try Ollama endpoints
+    # openai: only use OpenAI
+    # none: skip model calls and use deterministic fallbacks
+    ai_provider: str = "local_first"
+    local_ai_urls: str = "http://localhost:11434,http://alderaan.hoth:11434"
+    local_ai_model: str = "llama3.1:8b"
+    local_ai_timeout: int = 20
+    openai_fallback_enabled: bool = True
+
     # --- OpenAI ---
     openai_api_key: str = ""
     openai_model: str = "gpt-4o-mini"

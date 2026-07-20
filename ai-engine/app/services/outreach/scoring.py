@@ -1,18 +1,12 @@
-"""Relevance scoring via OpenAI."""
-
-from openai import OpenAI
+"""Relevance scoring via the configured AI provider."""
 
 from app.core.config import get_settings
+from app.services.ai_provider import generate_text
 
 
 def score_relevance(name: str, description: str = "") -> float:
     """Score how relevant a playlist / influencer is to the label's genre (0.0–1.0)."""
     settings = get_settings()
-    if not settings.openai_api_key:
-        return 0.5  # default when no key configured
-
-    client = OpenAI(api_key=settings.openai_api_key)
-
     prompt = (
         "You are a music marketing analyst.\n"
         f"Our label genre: {settings.label_genre}\n\n"
@@ -25,14 +19,14 @@ def score_relevance(name: str, description: str = "") -> float:
         "Return ONLY a single decimal number (e.g. 0.72). No other text."
     )
 
-    response = client.chat.completions.create(
-        model=settings.openai_model,
-        messages=[{"role": "user", "content": prompt}],
+    text = generate_text(
+        prompt,
         temperature=0.2,
         max_tokens=10,
     )
+    if not text:
+        return 0.5  # default when no model provider is configured or reachable
 
-    text = response.choices[0].message.content.strip()
     try:
         score = float(text)
         return max(0.0, min(1.0, score))

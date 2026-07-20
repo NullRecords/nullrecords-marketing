@@ -1830,6 +1830,13 @@ async function loadConfig() {
           `<div style="padding:4px 0"><span class="dot ${v?'on':'off'}"></span><strong>${k.toUpperCase()}</strong> — ${v?'Configured':'Not configured'}</div>`
         ).join('')}
       </div>
+      ${d.ai_status ? `
+        <div style="margin-top:0.75rem;color:var(--muted);font-size:0.75rem;line-height:1.6">
+          <div><strong>AI Provider:</strong> ${esc(d.ai_status.provider || 'local_first')}</div>
+          <div><strong>Local Model:</strong> ${esc(d.ai_status.local_ai_model || '')}</div>
+          <div><strong>OpenAI Fallback:</strong> ${d.ai_status.openai_fallback ? 'Enabled' : 'Disabled'}</div>
+        </div>
+      ` : ''}
       <p style="color:var(--muted);font-size:0.7rem;margin-top:0.75rem">Edit <code>.env</code> file to add or change API keys, then restart the server.</p>
     </div>
     <div class="card mb">

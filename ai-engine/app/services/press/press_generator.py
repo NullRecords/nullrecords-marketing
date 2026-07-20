@@ -1,16 +1,14 @@
 """AI-powered press release generator.
 
 Generates press releases for events like album releases, book launches,
-general announcements, etc.  Uses the brand profile + OpenAI.
+general announcements, etc. Uses the brand profile + configured AI provider.
 """
 
 import json
 import logging
 from typing import Any
 
-from openai import OpenAI
-
-from app.core.config import get_settings
+from app.services.ai_provider import generate_text
 from app.services.press.brand_profile import get_brand_summary, load_brand_profile
 
 log = logging.getLogger(__name__)
@@ -98,7 +96,7 @@ def _build_boilerplate(profile: dict) -> str:
     return "\n".join(lines)
 
 
-# ── Fallback (no OpenAI) ────────────────────────────────────────────────
+# ── Fallback (no AI provider) ───────────────────────────────────────────
 
 def _fallback_press_release(event_type: str, release_info: dict, profile: dict) -> dict:
     """Generate a basic press release without AI."""
@@ -138,13 +136,9 @@ def generate_press_release(
 
     Returns dict with: subject, body_text, body_html, boilerplate
     """
-    settings = get_settings()
     profile = load_brand_profile()
     brand_summary = get_brand_summary(vertical_id)
     boilerplate = _build_boilerplate(profile)
-
-    if not settings.openai_api_key:
-        return _fallback_press_release(event_type, release_info, profile)
 
     event_cfg = EVENT_TYPES.get(event_type, EVENT_TYPES["announcement"])
     tone = profile.get("tone", {})
@@ -174,19 +168,15 @@ def generate_press_release(
         "- Do NOT include the boilerplate 'About' section — it will be appended separately\n"
     )
 
-    client = OpenAI(api_key=settings.openai_api_key)
-
     # Generate body
-    response = client.chat.completions.create(
-        model=settings.openai_model,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
+    body_text = generate_text(
+        user_prompt,
+        system=system_prompt,
         temperature=0.6,
         max_tokens=1000,
     )
-    body_text = response.choices[0].message.content.strip()
+    if not body_text:
+        return _fallback_press_release(event_type, release_info, profile)
 
     # Generate subject line
     subject_prompt = (
@@ -199,13 +189,14 @@ def generate_press_release(
         "- Just the subject line, nothing else\n"
     )
 
-    resp2 = client.chat.completions.create(
-        model=settings.openai_model,
-        messages=[{"role": "user", "content": subject_prompt}],
+    subject = generate_text(
+        subject_prompt,
         temperature=0.5,
         max_tokens=40,
     )
-    subject = resp2.choices[0].message.content.strip().strip('"')
+    if not subject:
+        subject = f"Press Release: {release_info.get('title', 'New Release')}"
+    subject = subject.strip().strip('"')
 
     # Combine body + boilerplate
     full_text = f"{body_text}\n\n{boilerplate}"
