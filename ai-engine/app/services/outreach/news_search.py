@@ -1,4 +1,4 @@
-"""Web news search — finds mentions of NullRecords and My Evil Robot Army.
+"""Web news search — finds mentions of NullRecords products and artists.
 
 Uses DuckDuckGo HTML search (no API key) plus targeted site scraping
 for music press, social media, and forums.
@@ -31,6 +31,12 @@ SEARCH_QUERIES = [
     '"nullrecords.com"',
     '"My Evil Robot Army" album',
     '"My Evil Robot Army" review',
+    '"Drift TV" "NullRecords"',
+    '"Drift TV" "Plex" "Jellyfin"',
+    '"Drift TV" "Android TV"',
+    '"Washoku Plus"',
+    '"washokuplus.com"',
+    '"Washoku Plus" app',
 ]
 
 
@@ -281,11 +287,15 @@ def _classify_type(result: dict) -> str:
 
 
 def _extract_artists(result: dict) -> list[str]:
-    """Extract which of our artists are mentioned."""
+    """Extract which NullRecords artists or products are mentioned."""
     text = f"{result.get('title', '')} {result.get('excerpt', '')}".lower()
     artists = []
     if "my evil robot army" in text or "mera" in text:
         artists.append("My Evil Robot Army")
     if "nullrecords" in text or "null records" in text:
         artists.append("NullRecords")
+    if "drift tv" in text:
+        artists.append("Drift TV")
+    if "washoku plus" in text or "washokuplus.com" in text:
+        artists.append("Washoku Plus")
     return artists or ["NullRecords"]

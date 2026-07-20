@@ -1,0 +1,94 @@
+{
+  "id": "20260720-7bd9c398",
+  "name": "Washoku Plus iOS Launch Outreach",
+  "event_type": "app_launch",
+  "vertical": "washoku_plus",
+  "release_info": {
+    "title": "Washoku Plus",
+    "description": "A calmer meal-planning app for iPhone and iPad with balanced meals, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.",
+    "platforms": [
+      "iPhone",
+      "iPad"
+    ],
+    "website": "https://www.washokuplus.com/",
+    "positioning": "No fad claims, no shame, and no cultural shortcuts. Inspired by balance, seasonality, simplicity, reflection, and care.",
+    "features": [
+      "weekly plans",
+      "allergy-aware swaps",
+      "health context",
+      "gentle insights",
+      "Balance Garden progress",
+      "Sprout mindful meal guide"
+    ],
+    "links": {
+      "website": "https://www.washokuplus.com/",
+      "support": "https://www.washokuplus.com/support",
+      "privacy": "https://www.washokuplus.com/privacy"
+    }
+  },
+  "press_release": {
+    "subject": "Press Release: Washoku Plus — NullRecords",
+    "body_text": "FOR IMMEDIATE RELEASE\n\n**Washoku Plus**\n\nA calmer meal-planning app for iPhone and iPad with balanced meals, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.\n\n### About NullRecords\nIndependent creative label, publisher, and app studio\n\n**Music**: Nu jazz, experimental electronic, lo-fi, and ambient music from My Evil Robot Army (MERA) and collaborators. Available on all major streaming platforms and as lossless downloads.\n**NullRecords Publishing / Null Press**: Annotated editions of classic literature with pop-up commentary by Bob the somewhat Humanist. Interactive ebooks with hyperlinked notes, available as free downloads with suggested donations.\n**Drift TV**: A lightweight mood-based wind-down app for Apple TV and Android/Google TV. Drift TV shuffles sound-leveled episodes from a user's own Plex or Jellyfin library, offers gentle animated mood screens with ambient music, and includes a Retro78 Jazz art-deco parlor scene powered by NullRecords Radio.\n**Washoku Plus**: A calmer way to plan healthy meals for iPhone and iPad. Washoku Plus is a global meal-planning app inspired by balance, seasonality, simplicity, reflection, and care, with balanced meal patterns, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.\n\nWebsite: https://nullrecords.com\nPress contact: hello@nullrecords.com\nSocial: Spotify: https://open.spotify.com/artist/4PBJ1WON6gmxC1L35HHh69 | Apple_Music: https://music.apple.com/us/artist/my-evil-robot-army/1576251082 | Youtube: https://www.youtube.com/@nullrecords | Instagram: https://instagram.com/nullrecords | Tiktok: https://tiktok.com/@nullrecords\n",
+    "body_html": "FOR IMMEDIATE RELEASE<br>\n<br>\n**Washoku Plus**<br>\n<br>\nA calmer meal-planning app for iPhone and iPad with balanced meals, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.<br>\n<br>\n### About NullRecords<br>\nIndependent creative label, publisher, and app studio<br>\n<br>\n**Music**: Nu jazz, experimental electronic, lo-fi, and ambient music from My Evil Robot Army (MERA) and collaborators. Available on all major streaming platforms and as lossless downloads.<br>\n**NullRecords Publishing / Null Press**: Annotated editions of classic literature with pop-up commentary by Bob the somewhat Humanist. Interactive ebooks with hyperlinked notes, available as free downloads with suggested donations.<br>\n**Drift TV**: A lightweight mood-based wind-down app for Apple TV and Android/Google TV. Drift TV shuffles sound-leveled episodes from a user's own Plex or Jellyfin library, offers gentle animated mood screens with ambient music, and includes a Retro78 Jazz art-deco parlor scene powered by NullRecords Radio.<br>\n**Washoku Plus**: A calmer way to plan healthy meals for iPhone and iPad. Washoku Plus is a global meal-planning app inspired by balance, seasonality, simplicity, reflection, and care, with balanced meal patterns, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.<br>\n<br>\nWebsite: https://nullrecords.com<br>\nPress contact: hello@nullrecords.com<br>\nSocial: Spotify: https://open.spotify.com/artist/4PBJ1WON6gmxC1L35HHh69 | Apple_Music: https://music.apple.com/us/artist/my-evil-robot-army/1576251082 | Youtube: https://www.youtube.com/@nullrecords | Instagram: https://instagram.com/nullrecords | Tiktok: https://tiktok.com/@nullrecords<br>\n",
+    "boilerplate": "### About NullRecords\nIndependent creative label, publisher, and app studio\n\n**Music**: Nu jazz, experimental electronic, lo-fi, and ambient music from My Evil Robot Army (MERA) and collaborators. Available on all major streaming platforms and as lossless downloads.\n**NullRecords Publishing / Null Press**: Annotated editions of classic literature with pop-up commentary by Bob the somewhat Humanist. Interactive ebooks with hyperlinked notes, available as free downloads with suggested donations.\n**Drift TV**: A lightweight mood-based wind-down app for Apple TV and Android/Google TV. Drift TV shuffles sound-leveled episodes from a user's own Plex or Jellyfin library, offers gentle animated mood screens with ambient music, and includes a Retro78 Jazz art-deco parlor scene powered by NullRecords Radio.\n**Washoku Plus**: A calmer way to plan healthy meals for iPhone and iPad. Washoku Plus is a global meal-planning app inspired by balance, seasonality, simplicity, reflection, and care, with balanced meal patterns, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.\n\nWebsite: https://nullrecords.com\nPress contact: hello@nullrecords.com\nSocial: Spotify: https://open.spotify.com/artist/4PBJ1WON6gmxC1L35HHh69 | Apple_Music: https://music.apple.com/us/artist/my-evil-robot-army/1576251082 | Youtube: https://www.youtube.com/@nullrecords | Instagram: https://instagram.com/nullrecords | Tiktok: https://tiktok.com/@nullrecords"
+  },
+  "status": "draft",
+  "contacts": [
+    {
+      "hash": "472b7a4fdf2c",
+      "name": "Food Tank - food and nutrition pitches",
+      "email": "",
+      "type": "food_writer",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    },
+    {
+      "hash": "edbb7ae4dee7",
+      "name": "AgFunderNews - foodtech coverage",
+      "email": "",
+      "type": "newsletter",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    },
+    {
+      "hash": "c1a2b395cde6",
+      "name": "FoodTech Weekly",
+      "email": "",
+      "type": "newsletter",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    },
+    {
+      "hash": "095d25826ae6",
+      "name": "Fast Company - app and food innovation coverage",
+      "email": "",
+      "type": "magazine",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    },
+    {
+      "hash": "7256ea57494d",
+      "name": "Nutritics Blog - nutrition technology audience",
+      "email": "",
+      "type": "food_writer",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    }
+  ],
+  "stats": {
+    "total_contacts": 5,
+    "with_email": 0,
+    "sent": 0,
+    "delivered": 0,
+    "opened": 0,
+    "failed": 0
+  },
+  "created_at": "2026-07-20T17:56:33+00:00",
+  "distributed_at": null,
+  "updated_at": "2026-07-20T17:58:24+00:00"
+}

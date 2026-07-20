@@ -1,0 +1,90 @@
+{
+  "id": "20260720-81490747",
+  "name": "Drift TV App Launch Outreach",
+  "event_type": "app_launch",
+  "vertical": "drift_tv",
+  "release_info": {
+    "title": "Drift TV",
+    "description": "A lightweight mood-based wind-down app for Apple TV and Android/Google TV, powered by NullRecords. It combines user-owned Plex/Jellyfin video playback with ambient NullRecords Radio mood screens and a Retro78 Jazz scene.",
+    "platforms": [
+      "Apple TV",
+      "Android TV",
+      "Google TV"
+    ],
+    "website": "https://www.nullrecords.com/drift-tv/",
+    "source": "https://github.com/NullRecords/drift-tv",
+    "version": "1.0.0",
+    "privacy_notes": "No Drift TV account required. Plex/Jellyfin server details stay local on device. Video streams from the user’s own servers; ambient audio streams from NullRecords Radio.",
+    "links": {
+      "landing_page": "https://www.nullrecords.com/drift-tv/",
+      "support": "https://www.nullrecords.com/drift-tv/support.html",
+      "privacy": "https://www.nullrecords.com/drift-tv/privacy.html",
+      "github": "https://github.com/NullRecords/drift-tv"
+    }
+  },
+  "press_release": {
+    "subject": "Press Release: Drift TV — NullRecords",
+    "body_text": "FOR IMMEDIATE RELEASE\n\n**Drift TV**\n\nA lightweight mood-based wind-down app for Apple TV and Android/Google TV, powered by NullRecords. It combines user-owned Plex/Jellyfin video playback with ambient NullRecords Radio mood screens and a Retro78 Jazz scene.\n\n### About NullRecords\nIndependent creative label, publisher, and app studio\n\n**Music**: Nu jazz, experimental electronic, lo-fi, and ambient music from My Evil Robot Army (MERA) and collaborators. Available on all major streaming platforms and as lossless downloads.\n**NullRecords Publishing / Null Press**: Annotated editions of classic literature with pop-up commentary by Bob the somewhat Humanist. Interactive ebooks with hyperlinked notes, available as free downloads with suggested donations.\n**Drift TV**: A lightweight mood-based wind-down app for Apple TV and Android/Google TV. Drift TV shuffles sound-leveled episodes from a user's own Plex or Jellyfin library, offers gentle animated mood screens with ambient music, and includes a Retro78 Jazz art-deco parlor scene powered by NullRecords Radio.\n**Washoku Plus**: A calmer way to plan healthy meals for iPhone and iPad. Washoku Plus is a global meal-planning app inspired by balance, seasonality, simplicity, reflection, and care, with balanced meal patterns, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.\n\nWebsite: https://nullrecords.com\nPress contact: hello@nullrecords.com\nSocial: Spotify: https://open.spotify.com/artist/4PBJ1WON6gmxC1L35HHh69 | Apple_Music: https://music.apple.com/us/artist/my-evil-robot-army/1576251082 | Youtube: https://www.youtube.com/@nullrecords | Instagram: https://instagram.com/nullrecords | Tiktok: https://tiktok.com/@nullrecords\n",
+    "body_html": "FOR IMMEDIATE RELEASE<br>\n<br>\n**Drift TV**<br>\n<br>\nA lightweight mood-based wind-down app for Apple TV and Android/Google TV, powered by NullRecords. It combines user-owned Plex/Jellyfin video playback with ambient NullRecords Radio mood screens and a Retro78 Jazz scene.<br>\n<br>\n### About NullRecords<br>\nIndependent creative label, publisher, and app studio<br>\n<br>\n**Music**: Nu jazz, experimental electronic, lo-fi, and ambient music from My Evil Robot Army (MERA) and collaborators. Available on all major streaming platforms and as lossless downloads.<br>\n**NullRecords Publishing / Null Press**: Annotated editions of classic literature with pop-up commentary by Bob the somewhat Humanist. Interactive ebooks with hyperlinked notes, available as free downloads with suggested donations.<br>\n**Drift TV**: A lightweight mood-based wind-down app for Apple TV and Android/Google TV. Drift TV shuffles sound-leveled episodes from a user's own Plex or Jellyfin library, offers gentle animated mood screens with ambient music, and includes a Retro78 Jazz art-deco parlor scene powered by NullRecords Radio.<br>\n**Washoku Plus**: A calmer way to plan healthy meals for iPhone and iPad. Washoku Plus is a global meal-planning app inspired by balance, seasonality, simplicity, reflection, and care, with balanced meal patterns, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.<br>\n<br>\nWebsite: https://nullrecords.com<br>\nPress contact: hello@nullrecords.com<br>\nSocial: Spotify: https://open.spotify.com/artist/4PBJ1WON6gmxC1L35HHh69 | Apple_Music: https://music.apple.com/us/artist/my-evil-robot-army/1576251082 | Youtube: https://www.youtube.com/@nullrecords | Instagram: https://instagram.com/nullrecords | Tiktok: https://tiktok.com/@nullrecords<br>\n",
+    "boilerplate": "### About NullRecords\nIndependent creative label, publisher, and app studio\n\n**Music**: Nu jazz, experimental electronic, lo-fi, and ambient music from My Evil Robot Army (MERA) and collaborators. Available on all major streaming platforms and as lossless downloads.\n**NullRecords Publishing / Null Press**: Annotated editions of classic literature with pop-up commentary by Bob the somewhat Humanist. Interactive ebooks with hyperlinked notes, available as free downloads with suggested donations.\n**Drift TV**: A lightweight mood-based wind-down app for Apple TV and Android/Google TV. Drift TV shuffles sound-leveled episodes from a user's own Plex or Jellyfin library, offers gentle animated mood screens with ambient music, and includes a Retro78 Jazz art-deco parlor scene powered by NullRecords Radio.\n**Washoku Plus**: A calmer way to plan healthy meals for iPhone and iPad. Washoku Plus is a global meal-planning app inspired by balance, seasonality, simplicity, reflection, and care, with balanced meal patterns, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.\n\nWebsite: https://nullrecords.com\nPress contact: hello@nullrecords.com\nSocial: Spotify: https://open.spotify.com/artist/4PBJ1WON6gmxC1L35HHh69 | Apple_Music: https://music.apple.com/us/artist/my-evil-robot-army/1576251082 | Youtube: https://www.youtube.com/@nullrecords | Instagram: https://instagram.com/nullrecords | Tiktok: https://tiktok.com/@nullrecords"
+  },
+  "status": "draft",
+  "contacts": [
+    {
+      "hash": "2c6229edda08",
+      "name": "Wired - Plex/Jellyfin personal media coverage",
+      "email": "",
+      "type": "magazine",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    },
+    {
+      "hash": "91679a2ca3a0",
+      "name": "XDA Developers - Plex/Jellyfin and home server coverage",
+      "email": "",
+      "type": "blog",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    },
+    {
+      "hash": "5b18103b41d1",
+      "name": "How-To Geek - Jellyfin and self-hosted media coverage",
+      "email": "",
+      "type": "blog",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    },
+    {
+      "hash": "e8874a5c22b8",
+      "name": "Plex Dev Community Forum",
+      "email": "",
+      "type": "home_theater",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    },
+    {
+      "hash": "1fac1e3d2d28",
+      "name": "Reddit JellyfinCommunity",
+      "email": "",
+      "type": "home_theater",
+      "send_status": "pending",
+      "message_id": null,
+      "sent_at": null
+    }
+  ],
+  "stats": {
+    "total_contacts": 5,
+    "with_email": 0,
+    "sent": 0,
+    "delivered": 0,
+    "opened": 0,
+    "failed": 0
+  },
+  "created_at": "2026-07-20T17:56:33+00:00",
+  "distributed_at": null,
+  "updated_at": "2026-07-20T17:58:24+00:00"
+}

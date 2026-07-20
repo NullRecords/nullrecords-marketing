@@ -127,6 +127,9 @@ _TYPE_SIGNALS = {
     "newsletter": ["newsletter", "substack", "mailchimp", "subscribe"],
     "book_club": ["book club", "reading group", "readers", "discussion"],
     "library": ["library", "librarian", "acquisition", "collection"],
+    "app_reviewer": ["app review", "apps", "app store", "ios app", "android app", "google tv", "apple tv"],
+    "food_writer": ["food", "recipe", "meal planning", "nutrition", "dietitian", "healthy eating"],
+    "home_theater": ["home theater", "plex", "jellyfin", "cord cutter", "android tv", "apple tv"],
 }
 
 
@@ -147,9 +150,17 @@ def _classify_vertical(title: str, snippet: str) -> str:
     """Guess which vertical (music or books) a contact belongs to."""
     combined = f"{title} {snippet}".lower()
     book_signals = ["book", "novel", "literature", "author", "read", "publish", "ebook", "library"]
+    drift_signals = ["drift tv", "plex", "jellyfin", "android tv", "google tv", "apple tv", "home theater", "cord cutter", "ambient tv"]
+    washoku_signals = ["washoku", "meal planning", "nutrition", "healthy eating", "dietitian", "recipe", "food app", "mindful eating"]
     music_signals = ["music", "album", "jazz", "electronic", "radio", "dj", "playlist", "track"]
     book_score = sum(1 for s in book_signals if s in combined)
+    drift_score = sum(1 for s in drift_signals if s in combined)
+    washoku_score = sum(1 for s in washoku_signals if s in combined)
     music_score = sum(1 for s in music_signals if s in combined)
+    app_scores = {"drift_tv": drift_score, "washoku_plus": washoku_score}
+    best_app = max(app_scores, key=app_scores.get)
+    if app_scores[best_app] > max(book_score, music_score):
+        return best_app
     if book_score > music_score:
         return "books"
     return "music"

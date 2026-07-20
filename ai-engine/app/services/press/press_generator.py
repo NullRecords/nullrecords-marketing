@@ -39,6 +39,21 @@ EVENT_TYPES = {
             "Include the book's premise, series context, genre, and where to buy/read."
         ),
     },
+    "app_launch": {
+        "label": "App Launch",
+        "prompt_hint": (
+            "This is for a new app launch or major app availability announcement. "
+            "Include platform availability, core use cases, privacy or data-handling facts if provided, "
+            "where to download or learn more, and the audience the app is built for."
+        ),
+    },
+    "app_update": {
+        "label": "App Update",
+        "prompt_hint": (
+            "This is for a product update to an existing app. "
+            "Focus on what changed, who benefits, platform availability, and where to download or learn more."
+        ),
+    },
     "announcement": {
         "label": "General Announcement",
         "prompt_hint": (

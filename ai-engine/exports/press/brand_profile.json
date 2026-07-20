@@ -1,6 +1,6 @@
 {
   "name": "NullRecords",
-  "tagline": "Independent music label and publisher — nu jazz, experimental electronic",
+  "tagline": "Independent creative label, publisher, and app studio",
   "website": "https://nullrecords.com",
   "email": "hello@nullrecords.com",
   "founded": "2021",
@@ -25,6 +25,32 @@
       "series": "Bob the somewhat Humanist",
       "releases": [],
       "press_targets": ["book review podcasts", "literary blogs", "indie publishing newsletters", "book influencers", "library acquisition departments", "book clubs", "literary magazines"]
+    },
+    {
+      "id": "drift_tv",
+      "name": "Drift TV",
+      "description": "A lightweight mood-based wind-down app for Apple TV and Android/Google TV. Drift TV shuffles sound-leveled episodes from a user's own Plex or Jellyfin library, offers gentle animated mood screens with ambient music, and includes a Retro78 Jazz art-deco parlor scene powered by NullRecords Radio.",
+      "platforms": ["Apple TV", "Android TV", "Google TV"],
+      "website": "https://www.nullrecords.com/drift-tv/",
+      "source": "https://github.com/NullRecords/drift-tv",
+      "version": "1.0.0",
+      "genres": ["ambient TV", "wind-down app", "home theater", "Plex", "Jellyfin", "Apple TV", "Android TV"],
+      "releases": [
+        {"title": "Drift TV", "type": "tv app", "platforms": "Apple TV, Android/Google TV"}
+      ],
+      "press_targets": ["Apple TV app reviewers", "Android TV app reviewers", "Plex communities", "Jellyfin communities", "home theater blogs", "cord-cutter newsletters", "ambient media writers", "sleep and relaxation app reviewers"]
+    },
+    {
+      "id": "washoku_plus",
+      "name": "Washoku Plus",
+      "description": "A calmer way to plan healthy meals for iPhone and iPad. Washoku Plus is a global meal-planning app inspired by balance, seasonality, simplicity, reflection, and care, with balanced meal patterns, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.",
+      "platforms": ["iPhone", "iPad"],
+      "website": "https://www.washokuplus.com/",
+      "genres": ["meal planning", "nutrition education", "healthy habits", "global flavors", "allergy-aware cooking", "mindful eating"],
+      "releases": [
+        {"title": "Washoku Plus", "type": "iOS app", "platforms": "iPhone, iPad"}
+      ],
+      "press_targets": ["food tech writers", "nutrition newsletters", "healthy meal planning blogs", "iOS app reviewers", "wellness app reviewers", "dietitian bloggers", "family meal planning sites", "allergy-aware cooking communities"]
     }
   ],
   "social": {
@@ -35,9 +61,9 @@
     "tiktok": "https://tiktok.com/@nullrecords"
   },
   "tone": {
-    "voice": "Approachable, genuine, independent. We're a small shop making interesting things.",
+    "voice": "Approachable, genuine, independent. We're a small shop making interesting music, books, and useful apps.",
     "avoid": ["hard sell", "corporate speak", "hype language", "equity-free", "without giving up equity"],
-    "keywords": ["independent", "experimental", "handcrafted", "founder-first", "nu jazz", "interactive ebooks"]
+    "keywords": ["independent", "experimental", "handcrafted", "founder-first", "nu jazz", "interactive ebooks", "Apple TV apps", "meal planning apps", "gentle technology"]
   },
   "discovery_searches": {
     "music": [
@@ -63,6 +89,30 @@
       "ebook review blog interactive",
       "science fiction podcast classic novels",
       "philosophical fiction book review"
+    ],
+    "drift_tv": [
+      "Apple TV app review ambient relaxation",
+      "Android TV app review home theater",
+      "Google TV app review Plex Jellyfin",
+      "Plex app community wind down TV",
+      "Jellyfin app community Android TV",
+      "cord cutter newsletter Apple TV apps",
+      "ambient video sleep app review",
+      "home theater blog Android TV app",
+      "smart TV app reviewer contact",
+      "relaxation app press contact"
+    ],
+    "washoku_plus": [
+      "iOS meal planning app review",
+      "healthy meal planning app press",
+      "nutrition app review iPhone iPad",
+      "food tech newsletter meal planning",
+      "wellness app reviewer nutrition",
+      "dietitian blog meal planning app",
+      "allergy aware cooking blog app",
+      "mindful eating app review",
+      "healthy habits app journalist",
+      "family meal planning blog app"
     ]
   }
 }
