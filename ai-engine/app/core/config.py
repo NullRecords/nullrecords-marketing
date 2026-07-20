@@ -68,6 +68,9 @@ class Settings(BaseSettings):
     scheduler_followup_minutes: int = 60
     scheduler_media_ingest_hours: int = 12
     scheduler_discovery_query: str = "nu jazz experimental electronic indie"
+    scheduler_report_hourly_minutes: int = 60
+    scheduler_report_daily_hours: int = 24
+    scheduler_report_weekly_hours: int = 168
 
     # --- Auto-outreach ---
     auto_outreach_interval_hours: int = 24

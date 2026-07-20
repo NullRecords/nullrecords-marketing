@@ -13,6 +13,7 @@ media-library/internet_archive/*
 # Exports
 exports/videos/*
 exports/social/*
+exports/marketing_reports/*
 !exports/videos/.gitkeep
 !exports/social/.gitkeep
 

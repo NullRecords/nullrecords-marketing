@@ -1011,6 +1011,22 @@ def _run_platform_stats_refresh():
         logger.debug("Platform stats refresh — no stats returned from YouTube API")
 
 
+def _run_marketing_report(cadence: str):
+    """Generate and save a marketing automation report."""
+    from app.core.database import SessionLocal
+    from app.services.marketing_reports import build_marketing_report, save_marketing_report
+
+    db = SessionLocal()
+    try:
+        report = build_marketing_report(db, cadence, scheduler_status=get_scheduler_status())
+        paths = save_marketing_report(report)
+        logger.info("Marketing %s report generated: %s", cadence, paths["latest_html"])
+    except Exception:
+        logger.exception("Error generating %s marketing report", cadence)
+    finally:
+        db.close()
+
+
 def _run_press_discovery():
     """Periodically discover new press contacts for music and books verticals."""
     from app.services.press.press_discovery import (
@@ -1175,12 +1191,36 @@ def start_scheduler():
         replace_existing=True,
     )
 
+    _scheduler.add_job(
+        lambda: _run_marketing_report("hourly"),
+        trigger=IntervalTrigger(minutes=settings.scheduler_report_hourly_minutes),
+        id="marketing_report_hourly",
+        name="Generate hourly marketing automation report",
+        replace_existing=True,
+    )
+
+    _scheduler.add_job(
+        lambda: _run_marketing_report("daily"),
+        trigger=IntervalTrigger(hours=settings.scheduler_report_daily_hours),
+        id="marketing_report_daily",
+        name="Generate daily marketing automation report",
+        replace_existing=True,
+    )
+
+    _scheduler.add_job(
+        lambda: _run_marketing_report("weekly"),
+        trigger=IntervalTrigger(hours=settings.scheduler_report_weekly_hours),
+        id="marketing_report_weekly",
+        name="Generate weekly marketing automation report",
+        replace_existing=True,
+    )
+
     _scheduler.start()
     logger.info(
         "Scheduler started — followups every %dm, discovery every %dh, "
         "media ingest every %dh, Brevo CRM sync every 6h, DJ/radio every 48h, "
         "daily shorts generation every 24h, daily shorts posting every 2h, "
-        "platform stats refresh every 6h",
+        "platform stats refresh every 6h, marketing reports hourly/daily/weekly",
         settings.scheduler_followup_minutes,
         settings.scheduler_discovery_hours,
         settings.scheduler_media_ingest_hours,
@@ -1223,4 +1263,3 @@ def trigger_job(job_id: str) -> bool:
 
     job.modify(next_run_time=datetime.now(timezone.utc))
     return True
-
