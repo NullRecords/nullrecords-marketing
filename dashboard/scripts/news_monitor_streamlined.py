@@ -26,6 +26,12 @@ import argparse
 from urllib.parse import urljoin, urlparse, quote
 import hashlib
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+DASHBOARD_DIR = SCRIPT_DIR.parent
+WORKSPACE_DIR = DASHBOARD_DIR.parent
+LOG_DIR = DASHBOARD_DIR / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 # Optional dependencies
 try:
     import requests
@@ -40,7 +46,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('news_monitor.log'),
+        logging.FileHandler(LOG_DIR / 'news_monitor.log'),
         logging.StreamHandler()
     ]
 )
@@ -74,7 +80,7 @@ class StreamlinedNewsMonitor:
     
     def __init__(self):
         self.articles: List[NewsArticle] = []
-        self.data_file = "news_articles.json"
+        self.data_file = WORKSPACE_DIR / "docs" / "news_articles.json"
         self.artists = [
             "NullRecords",
             "My Evil Robot Army", 
@@ -141,7 +147,12 @@ class StreamlinedNewsMonitor:
             try:
                 with open(self.data_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    self.articles = [NewsArticle(**article) for article in data]
+                    self.articles = []
+                    for article in data:
+                        article.setdefault("content", article.get("excerpt", ""))
+                        article.setdefault("source", "unknown")
+                        article.setdefault("url", "")
+                        self.articles.append(NewsArticle(**article))
                 logging.info(f"📰 Loaded {len(self.articles)} existing articles")
             except Exception as e:
                 logging.error(f"❌ Error loading articles: {e}")

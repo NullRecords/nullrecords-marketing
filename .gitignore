@@ -1,14 +1,23 @@
 # Static website - this is now a GitHub Pages site
 # Keep only the necessary static assets
+.DS_Store
+**/.DS_Store
 
 # Outreach tool data (keep private)
 outreach_contacts.json
+dashboard/outreach_contacts.json
 outreach_data.json
+dashboard/outreach_data.json
 outreach_sources.json
+dashboard/outreach_sources.json
 outreach_contacts_export.json
+dashboard/outreach_contacts_export.json
 outreach_schedule.json
+dashboard/outreach_schedule.json
 outreach_config.json
+dashboard/outreach_config.json
 daily_outreach_log.json
+dashboard/daily_outreach_log.json
 outreach.log
 daily_outreach_*.log
 *.log

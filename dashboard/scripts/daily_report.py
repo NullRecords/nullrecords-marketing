@@ -27,6 +27,12 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 import argparse
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+DASHBOARD_DIR = SCRIPT_DIR.parent
+WORKSPACE_DIR = DASHBOARD_DIR.parent
+LOG_DIR = DASHBOARD_DIR / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 # Import opt-out management
 try:
     from email_opt_out import check_opt_out, get_opt_out_link
@@ -85,10 +91,25 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs', 'daily_report.log')),
+        logging.FileHandler(LOG_DIR / 'daily_report.log'),
         logging.StreamHandler()
     ]
 )
+
+
+def get_ai_engine_url() -> str:
+    """Return configured AI Engine URL, falling back to the service manager port file."""
+    configured = os.getenv('AI_ENGINE_URL')
+    if configured:
+        return configured.rstrip("/")
+
+    port_file = WORKSPACE_DIR / "ops" / ".pids" / "ai-engine.port"
+    if port_file.exists():
+        port = port_file.read_text().strip()
+        if port:
+            return f"http://localhost:{port}"
+
+    return "http://localhost:8008"
 
 @dataclass
 class DailyMetrics:
@@ -160,7 +181,7 @@ class DailyReportSystem:
     def __init__(self):
         self.report_date = datetime.now().strftime('%Y-%m-%d')
         self.metrics = DailyMetrics(date=self.report_date)
-        self.ai_engine_url = os.getenv('AI_ENGINE_URL', 'http://localhost:8008')
+        self.ai_engine_url = get_ai_engine_url()
         self.initialize_apis()
         
     def initialize_apis(self):
@@ -477,19 +498,21 @@ class DailyReportSystem:
         """Collect email campaign statistics from the AI engine."""
         logging.info("📧 Collecting email campaign data...")
         
-        ai_engine_url = os.getenv('AI_ENGINE_URL', 'http://localhost:8008')
+        ai_engine_url = self.ai_engine_url
         try:
             if SCRAPING_AVAILABLE:
                 r = requests.get(f"{ai_engine_url}/admin/api/overview", timeout=5)
                 if r.status_code == 200:
                     data = r.json()
                     outreach = data.get("outreach", {})
-                    self.metrics.emails_sent = outreach.get("sent", 0) + outreach.get("delivered", 0)
-                    self.metrics.outreach_campaigns = outreach.get("total", 0)
+                    sent = outreach.get("messages_sent", outreach.get("sent", 0))
+                    delivered = outreach.get("delivered", 0)
+                    self.metrics.emails_sent = sent + delivered
+                    self.metrics.outreach_campaigns = outreach.get("total_logs", outreach.get("total", 0))
                     
                     # Calculate open rate from tracking data
-                    total = outreach.get("total", 0)
-                    opened = outreach.get("opened", 0)
+                    total = self.metrics.outreach_campaigns
+                    opened = outreach.get("emails_opened", outreach.get("opened", 0))
                     if total > 0:
                         self.metrics.email_open_rate = round((opened / total) * 100, 1)
                     
@@ -518,7 +541,7 @@ class DailyReportSystem:
         """Collect outreach data from the AI engine API."""
         logging.info("🎯 Collecting outreach data...")
         
-        ai_engine_url = os.getenv('AI_ENGINE_URL', 'http://localhost:8008')
+        ai_engine_url = self.ai_engine_url
         
         try:
             if not SCRAPING_AVAILABLE:
@@ -756,7 +779,7 @@ class DailyReportSystem:
         logging.info("🔧 Collecting system health data...")
         
         try:
-            ai_engine_url = os.getenv('AI_ENGINE_URL', 'http://localhost:8008')
+            ai_engine_url = self.ai_engine_url
             website_url = os.getenv('WEBSITE_BASE_URL', 'https://nullrecords.com')
             
             # Check services

@@ -24,12 +24,19 @@ import argparse
 from urllib.parse import urljoin, urlparse
 import hashlib
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+DASHBOARD_DIR = SCRIPT_DIR.parent
+LOG_DIR = DASHBOARD_DIR / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 # Load environment variables from .env file if it exists
 try:
     from dotenv import load_dotenv
-    if os.path.exists('.env'):
-        load_dotenv('.env')
-        logging.info("✅ Environment variables loaded from .env file")
+    for env_path in (DASHBOARD_DIR / ".env", DASHBOARD_DIR.parent / ".env", Path.cwd() / ".env"):
+        if env_path.exists():
+            load_dotenv(env_path)
+            logging.info("✅ Environment variables loaded from %s", env_path)
+            break
 except ImportError:
     logging.warning("⚠️  python-dotenv not installed - using system environment variables only")
     logging.info("💡 Install with: pip install python-dotenv")
@@ -67,7 +74,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs', 'music_outreach.log')),
+        logging.FileHandler(LOG_DIR / 'music_outreach.log'),
         logging.StreamHandler()
     ]
 )
@@ -119,9 +126,9 @@ class MusicOutreach:
     """Main outreach automation class"""
     
     def __init__(self):
-        self.contacts_file = Path("outreach_contacts.json")
-        self.data_file = Path("outreach_data.json")
-        self.sources_file = Path("outreach_sources.json")
+        self.contacts_file = DASHBOARD_DIR / "outreach_contacts.json"
+        self.data_file = DASHBOARD_DIR / "outreach_data.json"
+        self.sources_file = DASHBOARD_DIR / "outreach_sources.json"
         self.contacts: List[Contact] = []
         self.sources: List[SourceTracker] = []
         self.session = requests.Session() if requests else None
@@ -1317,7 +1324,7 @@ NullRecords Outreach Automation
         }
         
         # Save daily log
-        daily_log_file = Path("daily_outreach_log.json")
+        daily_log_file = DASHBOARD_DIR / "daily_outreach_log.json"
         if daily_log_file.exists():
             with open(daily_log_file, 'r') as f:
                 daily_log = json.load(f)

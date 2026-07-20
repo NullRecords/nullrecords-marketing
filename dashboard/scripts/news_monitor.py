@@ -27,12 +27,20 @@ import argparse
 from urllib.parse import urljoin, urlparse, quote
 import hashlib
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+DASHBOARD_DIR = SCRIPT_DIR.parent
+WORKSPACE_DIR = DASHBOARD_DIR.parent
+LOG_DIR = DASHBOARD_DIR / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 # Load environment variables
 try:
     from dotenv import load_dotenv
-    if os.path.exists('.env'):
-        load_dotenv('.env')
-        logging.info("✅ Environment variables loaded from .env file")
+    for env_path in (DASHBOARD_DIR / ".env", WORKSPACE_DIR / ".env", Path.cwd() / ".env"):
+        if env_path.exists():
+            load_dotenv(env_path)
+            logging.info("✅ Environment variables loaded from %s", env_path)
+            break
 except ImportError:
     logging.warning("⚠️  python-dotenv not installed - using system environment variables only")
 
@@ -58,7 +66,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs', 'news_monitor.log')),
+        logging.FileHandler(LOG_DIR / 'news_monitor.log'),
         logging.StreamHandler()
     ]
 )
@@ -92,7 +100,7 @@ class NewsMonitor:
     
     def __init__(self):
         self.articles: List[NewsArticle] = []
-        self.data_file = "news_articles.json"
+        self.data_file = WORKSPACE_DIR / "docs" / "news_articles.json"
         self.artists = [
             "NullRecords",
             "My Evil Robot Army", 
@@ -442,7 +450,12 @@ class NewsMonitor:
             try:
                 with open(self.data_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    self.articles = [NewsArticle(**article) for article in data]
+                    self.articles = []
+                    for article in data:
+                        article.setdefault("content", article.get("excerpt", ""))
+                        article.setdefault("source", "unknown")
+                        article.setdefault("url", "")
+                        self.articles.append(NewsArticle(**article))
                 logging.info(f"📰 Loaded {len(self.articles)} existing articles")
             except Exception as e:
                 logging.error(f"❌ Error loading articles: {e}")
