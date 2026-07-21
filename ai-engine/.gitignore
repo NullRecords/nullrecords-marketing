@@ -3,6 +3,7 @@ ai_engine.db
 
 # Environment
 .env
+.youtube_tokens.json
 
 # Media downloads
 media-library/pexels/*

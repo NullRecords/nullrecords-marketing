@@ -19,7 +19,7 @@ import shutil
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
@@ -1106,25 +1106,31 @@ def youtube_status():
 
 
 @router.get("/youtube/auth")
-def youtube_auth(redirect_uri: str = Query("http://localhost:8200/video/youtube/callback")):
+def youtube_auth(
+    request: Request,
+    redirect_uri: str | None = Query(None),
+):
     """Return the Google OAuth2 consent URL for YouTube upload permissions."""
     from app.services.social.youtube import get_auth_url
+    callback_uri = redirect_uri or str(request.url_for("youtube_callback"))
     try:
-        url = get_auth_url(redirect_uri)
+        url = get_auth_url(callback_uri)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    return {"auth_url": url}
+    return {"auth_url": url, "redirect_uri": callback_uri}
 
 
 @router.get("/youtube/callback")
 def youtube_callback(
+    request: Request,
     code: str = Query(...),
-    redirect_uri: str = Query("http://localhost:8200/video/youtube/callback"),
+    redirect_uri: str | None = Query(None),
 ):
     """Handle the OAuth2 callback — exchange the code for tokens."""
     from app.services.social.youtube import exchange_code
+    callback_uri = redirect_uri or str(request.url_for("youtube_callback"))
     try:
-        tokens = exchange_code(code, redirect_uri)
+        tokens = exchange_code(code, callback_uri)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Token exchange failed: {e}")
     return {"status": "authenticated", "message": "YouTube tokens saved. You can now upload videos."}

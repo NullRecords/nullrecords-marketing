@@ -176,13 +176,12 @@ def _refresh_oauth_token(tokens: dict) -> str:
 
 
 def is_authenticated() -> bool:
-    """Check whether we can upload — service account or OAuth2 tokens."""
-    # Service account available?
-    if _get_service_account_path():
-        return True
-    # OAuth tokens available?
-    tokens = _load_tokens()
-    return bool(tokens and tokens.get("refresh_token"))
+    """Check whether we can obtain an access token for upload operations."""
+    try:
+        return bool(_get_access_token())
+    except Exception as exc:
+        log.info("YouTube auth check failed: %s", exc)
+        return False
 
 
 def upload_video(
