@@ -1,11 +1,11 @@
 # NullRecords Development Guide
 
-This guide provides an overview of the NullRecords CMS project structure, development workflow, and automation systems.
+This guide provides an overview of the NullRecords Marketing project structure, development workflow, and automation systems.
 
 ## 📁 Project Structure
 
 ```
-ob-cms/
+nullrecords-marketing/
 ├── devdocs/                    # Development documentation
 ├── scripts/                    # Automation and utility scripts
 ├── .github/prompts/           # Development guides and prompts

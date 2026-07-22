@@ -2,7 +2,7 @@
 
 ## Current Status: Mock Data
 
-The NullRecords CMS currently uses **mock/fake Google Analytics data** for testing purposes. This document explains how to enable real Google Analytics integration.
+The NullRecords Marketing currently uses **mock/fake Google Analytics data** for testing purposes. This document explains how to enable real Google Analytics integration.
 
 ## Evidence of Mock Data
 
@@ -104,7 +104,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="/opt/nullrecords/credentials/ga-service-a
 # Development Environment  
 export GA_PROPERTY_ID="3376868194"
 export GA_MEASUREMENT_ID="G-2WVCJM4NKR"
-export GOOGLE_APPLICATION_CREDENTIALS="/Users/greglind/Projects/NullRecords/ob-cms/ga-credentials.json"
+export GOOGLE_APPLICATION_CREDENTIALS="/Users/greglind/Projects/NullRecords/nullrecords-marketing/ga-credentials.json"
 ```
 
 **For persistent configuration, add to `.bashrc` or `.zshrc`**:

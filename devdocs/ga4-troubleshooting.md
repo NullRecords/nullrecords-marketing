@@ -10,7 +10,7 @@
 
 ## Previous Issue (Fixed)
 Was getting 403 "User does not have sufficient permissions" error. Root cause was:
-1. `.env` had wrong credentials path (pointed to old `ob-cms/` directory)
+1. `.env` had wrong credentials path (pointed to the old CMS directory)
 2. Property ID documented as `3376868194` but correct value is `308964282`
 
 Once the credentials path was corrected in `dashboard/.env`, the API connected successfully.

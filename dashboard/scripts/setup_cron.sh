@@ -80,7 +80,7 @@ install_cron_jobs() {
     print_info "Installing NullRecords cron jobs..."
     
     # Update paths in cron file to use project directory
-    sed "s|/Users/greglind/Projects/NullRecords/ob-cms|$PROJECT_DIR|g" cron_schedule.txt > temp_cron.txt
+    sed "s|/Users/greglind/Projects/NullRecords/nullrecords-marketing|$PROJECT_DIR|g" cron_schedule.txt > temp_cron.txt
     
     # Get current crontab (if any)
     if crontab -l > /dev/null 2>&1; then

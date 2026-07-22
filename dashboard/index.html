@@ -402,7 +402,7 @@
 
       $('metrics').innerHTML = [
         metric('Scheduler jobs', schedulerJobs.length || '0', state.status?.scheduler?.running ? 'running' : 'not running'),
-        metric('Stale cron jobs', cron.stale_ob_cms ?? '0', `${cron.total ?? 0} total cron jobs`),
+        metric('Stale cron jobs', cron.stale_old_cms ?? '0', `${cron.total ?? 0} total cron jobs`),
         metric('Press contacts', press.contacts_total ?? '0', `${press.needs_email ?? 0} need email`),
         metric('Draft campaigns', press.campaigns_by_status?.draft ?? '0', 'review before distribution'),
         metric('Daily shorts', shorts.queue_total ?? '0', `${shorts.queue_by_status?.pending ?? 0} pending`),
@@ -536,7 +536,7 @@
         } else if (lower.includes('cron')) {
           progress.step('Reading cached cron inventory from the latest status payload...', 'done');
           const summary = state.status?.cron?.summary || {};
-          reply = `Cron inventory: ${summary.total ?? 0} jobs, ${summary.nullrecords ?? 0} NullRecords-related, ${summary.stale_ob_cms ?? 0} stale ob-cms jobs, ${summary.duplicates ?? 0} exact duplicates. I would not remove anything from chat yet; use this to plan cleanup.`;
+          reply = `Cron inventory: ${summary.total ?? 0} jobs, ${summary.nullrecords ?? 0} NullRecords-related, ${summary.stale_old_cms ?? 0} stale old CMS path jobs, ${summary.duplicates ?? 0} exact duplicates. I would not remove anything from chat yet; use this to plan cleanup.`;
           actions = [{ label: 'Refresh inventory', kind: 'primary', run: () => runCommand('refresh status') }];
         } else if (lower.includes('campaign')) {
           progress.step('Reading draft campaigns from the latest automation report...', 'done');

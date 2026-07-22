@@ -59,7 +59,7 @@ def get_cron_inventory() -> dict[str, Any]:
             "available": False,
             "error": str(exc),
             "jobs": [],
-            "summary": {"total": 0, "nullrecords": 0, "stale_ob_cms": 0, "duplicates": 0},
+            "summary": {"total": 0, "nullrecords": 0, "stale_old_cms": 0, "duplicates": 0},
         }
 
     if result.returncode != 0:
@@ -67,7 +67,7 @@ def get_cron_inventory() -> dict[str, Any]:
             "available": True,
             "error": result.stderr.strip(),
             "jobs": [],
-            "summary": {"total": 0, "nullrecords": 0, "stale_ob_cms": 0, "duplicates": 0},
+            "summary": {"total": 0, "nullrecords": 0, "stale_old_cms": 0, "duplicates": 0},
         }
 
     jobs = []
@@ -93,12 +93,13 @@ def get_cron_inventory() -> dict[str, Any]:
         command_only, _, comment = command.partition("#")
         command_key = command_only.strip()
         command_counts[command_key] += 1
+        is_stale_old_cms = "/NullRecords/ob-cms" in command_key
         jobs.append({
             "schedule": schedule,
             "command": command_key,
             "comment": comment.strip(),
             "is_nullrecords": "nullrecords" in command_key.lower(),
-            "is_stale_ob_cms": "/NullRecords/ob-cms" in command_key,
+            "is_stale_old_cms": is_stale_old_cms,
             "is_dashboard_related": "dashboard" in command_key.lower() or "daily_report" in command_key,
         })
 
@@ -115,7 +116,7 @@ def get_cron_inventory() -> dict[str, Any]:
         "summary": {
             "total": len(jobs),
             "nullrecords": sum(1 for job in jobs if job["is_nullrecords"]),
-            "stale_ob_cms": sum(1 for job in jobs if job["is_stale_ob_cms"]),
+            "stale_old_cms": sum(1 for job in jobs if job["is_stale_old_cms"]),
             "dashboard_related": sum(1 for job in jobs if job["is_dashboard_related"]),
             "duplicates": len(duplicates),
         },
@@ -219,9 +220,9 @@ def _build_action_items(
         items.append(f"Approve or reject {pending_shorts} pending daily shorts.")
 
     cron = get_cron_inventory()
-    stale = cron.get("summary", {}).get("stale_ob_cms", 0)
+    stale = cron.get("summary", {}).get("stale_old_cms", 0)
     if stale:
-        items.append(f"Migrate or remove {stale} stale cron jobs pointing at the old ob-cms path.")
+        items.append(f"Migrate or remove {stale} stale cron jobs pointing at the old CMS path.")
 
     return items
 
@@ -321,7 +322,7 @@ a {{ color: #9ed6c2; }}
 <div class="card"><h2>Outreach</h2><div class="num">{report['outreach']['new_in_window']}</div><p>new logs / {report['outreach']['followups_due']} follow-ups due</p></div>
 <div class="card"><h2>Press</h2><div class="num">{report['press']['contacts_total']}</div><p>{report['press']['needs_email']} contacts need email</p></div>
 <div class="card"><h2>Shorts</h2><div class="num">{report['daily_shorts']['queue_total']}</div><p>queued videos</p></div>
-<div class="card"><h2>Cron</h2><div class="num">{cron.get('total', 0)}</div><p>{cron.get('stale_ob_cms', 0)} stale ob-cms jobs</p></div>
+<div class="card"><h2>Cron</h2><div class="num">{cron.get('total', 0)}</div><p>{cron.get('stale_old_cms', 0)} stale old CMS path jobs</p></div>
 <div class="card"><h2>AI</h2><div class="num">{esc(str(report['ai'].get('provider', '')))}</div><p>{esc(str(report['ai'].get('local_ai_model', '')))}</p></div>
 </section>
 <h2>Action Items</h2>

@@ -27,7 +27,7 @@ Measurement ID: G-2WVCJM4NKR
 
 ### 1. **Install Dependencies** (5 minutes)
 ```bash
-cd /Users/greglind/Projects/NullRecords/ob-cms
+cd /Users/greglind/Projects/NullRecords/nullrecords-marketing
 ./setup-ga4.sh
 ```
 

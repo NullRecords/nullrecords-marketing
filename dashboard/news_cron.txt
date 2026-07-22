@@ -6,19 +6,19 @@
 # Or run: crontab news_cron.txt
 
 # Daily news collection at 9:00 AM
-# 0 9 * * * cd /Users/greglind/Projects/NullRecords/ob-cms && ./news_system.sh collect
+# 0 9 * * * cd /Users/greglind/Projects/NullRecords/nullrecords-marketing && ./news_system.sh collect
 
 # Monitor streaming platforms for new releases twice daily
-# 0 10,22 * * * cd /Users/greglind/Projects/NullRecords/ob-cms && ./news_system.sh releases
+# 0 10,22 * * * cd /Users/greglind/Projects/NullRecords/nullrecords-marketing && ./news_system.sh releases
 
 # Generate and update pages every 4 hours
-# 0 */4 * * * cd /Users/greglind/Projects/NullRecords/ob-cms && ./news_system.sh generate
+# 0 */4 * * * cd /Users/greglind/Projects/NullRecords/nullrecords-marketing && ./news_system.sh generate
 
 # Full update and deploy once daily at 6:00 PM
-# 0 18 * * * cd /Users/greglind/Projects/NullRecords/ob-cms && ./news_system.sh deploy
+# 0 18 * * * cd /Users/greglind/Projects/NullRecords/nullrecords-marketing && ./news_system.sh deploy
 
 # Weekly report on Sundays at 10:00 AM
-# 0 10 * * 0 cd /Users/greglind/Projects/NullRecords/ob-cms && ./news_system.sh report
+# 0 10 * * 0 cd /Users/greglind/Projects/NullRecords/nullrecords-marketing && ./news_system.sh report
 
 # Alternative: Single daily comprehensive update at 2:00 PM
-# 0 14 * * * cd /Users/greglind/Projects/NullRecords/ob-cms && ./news_system.sh deploy
+# 0 14 * * * cd /Users/greglind/Projects/NullRecords/nullrecords-marketing && ./news_system.sh deploy

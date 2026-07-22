@@ -1,6 +1,6 @@
 # NullRecords Scripts Directory
 
-This directory contains all automation and utility scripts for the NullRecords CMS project.
+This directory contains all automation and utility scripts for the NullRecords Marketing project.
 
 ## 📁 Script Organization
 

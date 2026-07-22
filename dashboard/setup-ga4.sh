@@ -32,7 +32,7 @@ print_error() {
 
 # Check if we're in the right directory
 if [ ! -f "shared-header.js" ] || [ ! -f "scripts/daily_report.py" ]; then
-    print_error "This script must be run from the NullRecords ob-cms directory"
+    print_error "This script must be run from the NullRecords Marketing directory"
     exit 1
 fi
 
