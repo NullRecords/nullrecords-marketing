@@ -10,47 +10,155 @@
       "id": "music",
       "name": "Music",
       "description": "Nu jazz, experimental electronic, lo-fi, and ambient music from My Evil Robot Army (MERA) and collaborators. Available on all major streaming platforms and as lossless downloads.",
-      "genres": ["nu jazz", "experimental electronic", "lo-fi", "ambient", "acid jazz", "broken beat", "space jazz"],
+      "genres": [
+        "nu jazz",
+        "experimental electronic",
+        "lo-fi",
+        "ambient",
+        "acid jazz",
+        "broken beat",
+        "space jazz"
+      ],
       "artists": [
-        {"name": "My Evil Robot Army", "alias": "MERA", "role": "primary"}
+        {
+          "name": "My Evil Robot Army",
+          "alias": "MERA",
+          "role": "primary"
+        }
       ],
       "releases": [],
-      "press_targets": ["jazz radio stations", "electronic music blogs", "indie playlists", "college radio", "music podcasts", "music magazines", "DJ collectives", "festival programmers"]
+      "press_targets": [
+        "jazz radio stations",
+        "electronic music blogs",
+        "indie playlists",
+        "college radio",
+        "music podcasts",
+        "music magazines",
+        "DJ collectives",
+        "festival programmers"
+      ]
     },
     {
       "id": "books",
       "name": "NullRecords Publishing / Null Press",
-      "description": "Annotated editions of classic literature with pop-up commentary by Bob the somewhat Humanist. Interactive ebooks with hyperlinked notes, available as free downloads with suggested donations.",
-      "genres": ["classic literature", "science fiction", "philosophical fiction", "annotated editions"],
+      "description": "Annotated editions of classic literature with pop-up commentary by Bob the somewhat Humanist. Interactive ebooks with hyperlinked notes, available as free downloads with suggested donations. Also produced as narrated audiobooks.",
+      "genres": [
+        "classic literature",
+        "science fiction",
+        "philosophical fiction",
+        "annotated editions",
+        "audiobooks"
+      ],
       "series": "Bob the somewhat Humanist",
       "releases": [],
-      "press_targets": ["book review podcasts", "literary blogs", "indie publishing newsletters", "book influencers", "library acquisition departments", "book clubs", "literary magazines"]
+      "press_targets": [
+        "book review podcasts",
+        "literary blogs",
+        "indie publishing newsletters",
+        "book influencers",
+        "library acquisition departments",
+        "book clubs",
+        "literary magazines"
+      ],
+      "formats": [
+        "ebook",
+        "audiobook"
+      ]
     },
     {
       "id": "drift_tv",
       "name": "Drift TV",
       "description": "A lightweight mood-based wind-down app for Apple TV and Android/Google TV. Drift TV shuffles sound-leveled episodes from a user's own Plex or Jellyfin library, offers gentle animated mood screens with ambient music, and includes a Retro78 Jazz art-deco parlor scene powered by NullRecords Radio.",
-      "platforms": ["Apple TV", "Android TV", "Google TV"],
+      "platforms": [
+        "Apple TV",
+        "Android TV",
+        "Google TV"
+      ],
       "website": "https://www.nullrecords.com/drift-tv/",
       "source": "https://github.com/NullRecords/drift-tv",
       "version": "1.0.0",
-      "genres": ["ambient TV", "wind-down app", "home theater", "Plex", "Jellyfin", "Apple TV", "Android TV"],
-      "releases": [
-        {"title": "Drift TV", "type": "tv app", "platforms": "Apple TV, Android/Google TV"}
+      "genres": [
+        "ambient TV",
+        "wind-down app",
+        "home theater",
+        "Plex",
+        "Jellyfin",
+        "Apple TV",
+        "Android TV"
       ],
-      "press_targets": ["Apple TV app reviewers", "Android TV app reviewers", "Plex communities", "Jellyfin communities", "home theater blogs", "cord-cutter newsletters", "ambient media writers", "sleep and relaxation app reviewers"]
+      "releases": [
+        {
+          "title": "Drift TV",
+          "type": "tv app",
+          "platforms": "Apple TV, Android/Google TV"
+        }
+      ],
+      "press_targets": [
+        "Apple TV app reviewers",
+        "Android TV app reviewers",
+        "Plex communities",
+        "Jellyfin communities",
+        "home theater blogs",
+        "cord-cutter newsletters",
+        "ambient media writers",
+        "sleep and relaxation app reviewers"
+      ]
     },
     {
       "id": "washoku_plus",
       "name": "Washoku Plus",
       "description": "A calmer way to plan healthy meals for iPhone and iPad. Washoku Plus is a global meal-planning app inspired by balance, seasonality, simplicity, reflection, and care, with balanced meal patterns, global flavors, gentle health insights, allergy-aware swaps, Sprout guidance, and education-first nutrition guides.",
-      "platforms": ["iPhone", "iPad"],
-      "website": "https://www.washokuplus.com/",
-      "genres": ["meal planning", "nutrition education", "healthy habits", "global flavors", "allergy-aware cooking", "mindful eating"],
-      "releases": [
-        {"title": "Washoku Plus", "type": "iOS app", "platforms": "iPhone, iPad"}
+      "platforms": [
+        "iPhone",
+        "iPad"
       ],
-      "press_targets": ["food tech writers", "nutrition newsletters", "healthy meal planning blogs", "iOS app reviewers", "wellness app reviewers", "dietitian bloggers", "family meal planning sites", "allergy-aware cooking communities"]
+      "website": "https://www.washokuplus.com/",
+      "genres": [
+        "meal planning",
+        "nutrition education",
+        "healthy habits",
+        "global flavors",
+        "allergy-aware cooking",
+        "mindful eating"
+      ],
+      "releases": [
+        {
+          "title": "Washoku Plus",
+          "type": "iOS app",
+          "platforms": "iPhone, iPad"
+        }
+      ],
+      "press_targets": [
+        "food tech writers",
+        "nutrition newsletters",
+        "healthy meal planning blogs",
+        "iOS app reviewers",
+        "wellness app reviewers",
+        "dietitian bloggers",
+        "family meal planning sites",
+        "allergy-aware cooking communities"
+      ]
+    },
+    {
+      "id": "unverified_file",
+      "name": "The Unverified File",
+      "description": "An independent archive and video series investigating unexplained documents, footage and reports. Publishes reviewed archive articles and companion YouTube episodes.",
+      "platforms": [
+        "Web",
+        "YouTube"
+      ],
+      "website": "https://unverifiedfile.com/",
+      "feeds": {
+        "articles": "https://unverifiedfile.com/api/articles.json",
+        "youtube": "https://unverifiedfile.com/api/youtube/widget.json"
+      },
+      "genres": [
+        "documentary",
+        "archive research",
+        "unexplained phenomena",
+        "investigative video",
+        "podcast"
+      ]
     }
   ],
   "social": {
@@ -62,8 +170,24 @@
   },
   "tone": {
     "voice": "Approachable, genuine, independent. We're a small shop making interesting music, books, and useful apps.",
-    "avoid": ["hard sell", "corporate speak", "hype language", "equity-free", "without giving up equity"],
-    "keywords": ["independent", "experimental", "handcrafted", "founder-first", "nu jazz", "interactive ebooks", "Apple TV apps", "meal planning apps", "gentle technology"]
+    "avoid": [
+      "hard sell",
+      "corporate speak",
+      "hype language",
+      "equity-free",
+      "without giving up equity"
+    ],
+    "keywords": [
+      "independent",
+      "experimental",
+      "handcrafted",
+      "founder-first",
+      "nu jazz",
+      "interactive ebooks",
+      "Apple TV apps",
+      "meal planning apps",
+      "gentle technology"
+    ]
   },
   "discovery_searches": {
     "music": [

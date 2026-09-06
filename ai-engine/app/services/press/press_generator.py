@@ -5,6 +5,7 @@ general announcements, etc. Uses the brand profile + configured AI provider.
 """
 
 import json
+from datetime import datetime
 import logging
 from typing import Any
 
@@ -121,6 +122,47 @@ def _fallback_press_release(event_type: str, release_info: dict, profile: dict) 
 
 # ── Main generation function ────────────────────────────────────────────
 
+
+def _markdown_to_html(text: str) -> str:
+    """Convert the generated markdown-ish press text to email-safe HTML.
+
+    The previous version only handled bold and newlines, so markdown HEADINGS
+    ("### Unwind with Ambient Serenity") rendered literally in the email body.
+    Headings are converted first, before the paragraph pass, so their line breaks
+    are not turned into <br>.
+    """
+    import re
+
+    lines = text.split("\n")
+    out: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        # The lone '###' is the standard press-release end marker, not a heading.
+        if stripped == "###":
+            out.append("<hr>")
+            continue
+        m = re.match(r"^(#{1,6})\s+(.*)$", stripped)
+        if m:
+            level = min(len(m.group(1)) + 1, 6)  # '#' -> h2, keeps h1 for the client
+            out.append(f"<h{level}>{m.group(2).strip()}</h{level}>")
+            continue
+        out.append(line)
+
+    html = "\n".join(out)
+    html = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", html)
+    html = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"<em>\1</em>", html)
+
+    # Paragraph/line-break pass, skipping block-level tags we just emitted.
+    blocks = [b.strip() for b in html.split("\n\n") if b.strip()]
+    rendered = []
+    for b in blocks:
+        if re.match(r"^<(h[1-6]|hr|ul|ol|p)\b", b):
+            rendered.append(b)
+        else:
+            rendered.append("<p>" + b.replace("\n", "<br>\n") + "</p>")
+    return "\n".join(rendered)
+
+
 def generate_press_release(
     event_type: str,
     release_info: dict[str, Any],
@@ -153,19 +195,31 @@ def generate_press_release(
         f"Avoid: {', '.join(avoid_list) if avoid_list else 'corporate jargon'}\n"
     )
 
+    # The model must never invent the date: left to itself it emits its training
+    # cutoff (observed: "October 12, 2023"). Inject today's date and tell it to
+    # reproduce that string verbatim.
+    today_str = datetime.now().strftime("%B %-d, %Y")
+
     user_prompt = (
         f"Write a press release for: **{event_cfg['label']}**\n\n"
         f"{event_cfg['prompt_hint']}\n\n"
         f"Release details:\n{json.dumps(release_info, indent=2, ensure_ascii=False)}\n\n"
         "Format requirements:\n"
-        "- Start with 'FOR IMMEDIATE RELEASE' and the date\n"
+        f"- Start with 'FOR IMMEDIATE RELEASE' then this exact date on its own line: {today_str}\n"
         "- Include a compelling headline (not the same as the subject line)\n"
         "- A strong lede paragraph with the key announcement\n"
-        "- 2-3 body paragraphs with details, quotes (you can invent a quote from the label), and context\n"
+        "- 2-3 body paragraphs with details and context\n"
         "- Include relevant links where provided\n"
         "- End with '###' (standard press release ending)\n"
         "- Total length: 300-500 words\n"
         "- Do NOT include the boilerplate 'About' section — it will be appended separately\n"
+        "- Use plain prose. Do NOT use markdown headings (no '#', '##', '###') anywhere\n"
+        "  except the single '###' that ends the release\n"
+        "\nFACTUAL ACCURACY (this copy is sent to journalists — treat it as on the record):\n"
+        "- Use ONLY the facts in 'Release details' and the brand context above\n"
+        "- Do NOT invent titles, track names, dates, prices, statistics, or partner names\n"
+        "- Do NOT invent quotes or attribute statements to anyone\n"
+        "- If a detail is missing, omit it rather than guessing\n"
     )
 
     # Generate body
@@ -201,15 +255,7 @@ def generate_press_release(
     # Combine body + boilerplate
     full_text = f"{body_text}\n\n{boilerplate}"
 
-    # Simple markdown-to-html conversion
-    body_html = full_text
-    body_html = body_html.replace("###\n", "<hr>\n")
-    body_html = body_html.replace("\n\n", "</p><p>")
-    body_html = body_html.replace("\n", "<br>\n")
-    # Bold
-    import re
-    body_html = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", body_html)
-    body_html = f"<p>{body_html}</p>"
+    body_html = _markdown_to_html(full_text)
 
     return {
         "subject": subject,
