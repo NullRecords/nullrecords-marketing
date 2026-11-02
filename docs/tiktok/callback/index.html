@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Connecting TikTok…</title>
+<style>
+  body { font: 16px/1.5 -apple-system, system-ui, sans-serif; background: #0b0f1e; color: #e6e9f5;
+         display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 16px; }
+  main { max-width: 32rem; text-align: center; }
+  a { color: #8ab4ff; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Connecting TikTok…</h1>
+  <p>Handing the sign-in back to Signal Studio on this computer.</p>
+  <p id="manual" hidden>If nothing happens, <a id="go" href="#">continue here</a>.
+     (Signal Studio's TikTok sign-in must be running on this Mac.)</p>
+</main>
+<script>
+  // TikTok's Login Kit for Web only redirects to https pages. This page forwards the
+  // one-time code and state, unchanged, to Signal Studio's sign-in listener on the same
+  // computer (localhost). It sends nothing anywhere else and stores nothing.
+  (function () {
+    var target = "http://localhost:8766/tiktok/callback/" + window.location.search;
+    document.getElementById("go").href = target;
+    document.getElementById("manual").hidden = false;
+    window.location.replace(target);
+  })();
+</script>
+</body>
+</html>
